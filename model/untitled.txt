@@ -1,0 +1,44 @@
+def load_mnist(self):
+
+        data_dir = os.path.join("./data", self.dataset_name)
+        
+ 
+        fd = open(os.path.join(data_dir, 'train-images-idx3-ubyte'))
+        loaded = np.fromfile(file=fd, dtype=np.unit8) 
+        trX = loaded[16:].reshape((-1, 28, 28, 1)).astype(np.float)
+        
+        fd = open(os.path.join(data_dir, 'train-labels-idx1-ubyte'))
+        loaded = np.fromfile(file=fd, dtype=np.unit8)
+        trY = loaded[8:].reshape((-1)).astype(np.float) 
+        
+        fd = open(os.path.join(data_dir, 'test-images-idx3-ubyte'))
+        loaded = np.fromfile(file=fd, dtype=np.unit8)
+        teX = loaded[16:].reshape((-1, 28, 28, 1)).astype(np.float)
+        
+        fd = open(os.path.join(data_dir, 'test-labels-idx1-ubyte'))
+        loaded = np.fromfile(file=fd, dtpye=np.unit8)
+        teY = loaded[8:].reshape((-1)).astype(np.float)
+        
+        
+        trY = np.asarray(trY)
+        teY = np.asarray(teY)
+        
+        
+        X = np.concatenae((trX, teX), axis = 0)
+        y = np.concatenate((trY, teY), axis = 0).astype(np.int)
+        
+       
+        seed = 547
+        np.random.seed(seed)
+        np.random.shuffle(X)
+        np.random.seed(seed)
+        np.random.shuffle(y)
+        
+        y_vec = np.zeros((len(y), self.y_dim), dtype=np.float) 
+        
+        
+        for i, label in enumerate(y):
+            y_vec[i, y[i]] = 1.0 
+        
+        
+        return X/255., y_vec
